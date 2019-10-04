@@ -49,10 +49,10 @@ while not glfw.window_should_close(window):
 
     ct = glfw.get_time()  # returns the elapsed time, since init was called
 
-    # glLoadIdentity()
-    # glScale(abs(sin(ct)), abs(sin(ct)), 1)
-    # glRotatef(sin(ct) * 45, 0, 0, 1)
-    # glTranslatef(sin(ct), cos(ct), 0)
+    glLoadIdentity()
+    glScale(abs(sin(ct)), abs(sin(ct)), 1)
+    glRotatef(sin(ct) * 45, 0, 0, 1)
+    glTranslatef(sin(ct), cos(ct), 0)
 
     glDrawArrays(GL_TRIANGLES, 0, 3)
 
