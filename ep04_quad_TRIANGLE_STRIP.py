@@ -30,6 +30,9 @@ void main()
 }
 """
 
+def window_resize(window, width, height):
+    glViewport(0, 0, width, height)
+
 # initializing glfw library
 if not glfw.init():
     raise Exception("glfw can not be initialized!")
@@ -44,6 +47,9 @@ if not window:
 
 # set window's position
 glfw.set_window_pos(window, 400, 200)
+
+# set the callback function for window resize
+glfw.set_window_size_callback(window, window_resize)
 
 # make the context current
 glfw.make_context_current(window)
