@@ -3,7 +3,6 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = '400,200'
 
 from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
-import ctypes
 import pygame
 import numpy as np
 import pyrr
