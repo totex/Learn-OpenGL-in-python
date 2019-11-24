@@ -3,7 +3,6 @@ from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 import numpy as np
 import pyrr
-from PIL import Image
 from TextureLoader import load_texture
 
 
@@ -128,9 +127,11 @@ glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertices.itemsize * 5, ctypes.c_
 glEnableVertexAttribArray(1)
 glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertices.itemsize * 5, ctypes.c_void_p(12))
 
-texture = glGenTextures(1)
+texture = glGenTextures(3)
 
-cube_texture = load_texture("textures/crate.jpg", texture)
+cube1_texture = load_texture("textures/crate.jpg", texture[0])
+cube2_texture = load_texture("textures/cat.png", texture[1])
+cube3_texture = load_texture("textures/smiley.png", texture[2])
 
 glUseProgram(shader)
 glClearColor(0, 0.1, 0.1, 1)
@@ -139,17 +140,19 @@ glEnable(GL_BLEND)
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
 projection = pyrr.matrix44.create_perspective_projection_matrix(45, 1280/720, 0.1, 100)
-model = pyrr.matrix44.create_from_translation(pyrr.Vector3([1, 0, 0]))
+cube1 = pyrr.matrix44.create_from_translation(pyrr.Vector3([1, 0, 0]))
+cube2 = pyrr.matrix44.create_from_translation(pyrr.Vector3([-1, 0, 0]))
+cube3 = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 1, -3]))
 
 # eye, target, up
-view = pyrr.matrix44.create_look_at(pyrr.Vector3([1, 1, 3]), pyrr.Vector3([0, 0, 0]), pyrr.Vector3([0, 1, 0]))
+view = pyrr.matrix44.create_look_at(pyrr.Vector3([0, 0, 3]), pyrr.Vector3([0, 0, 0]), pyrr.Vector3([0, 1, 0]))
 
 model_loc = glGetUniformLocation(shader, "model")
 proj_loc = glGetUniformLocation(shader, "projection")
 view_loc = glGetUniformLocation(shader, "view")
 
 glUniformMatrix4fv(proj_loc, 1, GL_FALSE, projection)
-glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
+
 glUniformMatrix4fv(view_loc, 1, GL_FALSE, view)
 
 # the main application loop
@@ -158,6 +161,26 @@ while not glfw.window_should_close(window):
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
+    rot_x = pyrr.Matrix44.from_x_rotation(0.5 * glfw.get_time())
+    rot_y = pyrr.Matrix44.from_y_rotation(0.8 * glfw.get_time())
+
+    rotation = pyrr.matrix44.multiply(rot_x, rot_y)
+    model = pyrr.matrix44.multiply(rotation, cube1)
+
+    glBindTexture(GL_TEXTURE_2D, texture[0])
+    glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
+    glDrawElements(GL_TRIANGLES, len(indices), GL_UNSIGNED_INT, None)
+
+    model = pyrr.matrix44.multiply(rot_x, cube2)
+
+    glBindTexture(GL_TEXTURE_2D, texture[1])
+    glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
+    glDrawElements(GL_TRIANGLES, len(indices), GL_UNSIGNED_INT, None)
+
+    model = pyrr.matrix44.multiply(rot_y, cube3)
+
+    glBindTexture(GL_TEXTURE_2D, texture[2])
+    glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
     glDrawElements(GL_TRIANGLES, len(indices), GL_UNSIGNED_INT, None)
 
     glfw.swap_buffers(window)
