@@ -139,7 +139,7 @@ glEnable(GL_BLEND)
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
 projection = pyrr.matrix44.create_perspective_projection_matrix(45, 1280/720, 0.1, 100)
-translation = pyrr.matrix44.create_from_translation(pyrr.Vector3([1, 0, 0]))
+model = pyrr.matrix44.create_from_translation(pyrr.Vector3([1, 0, 0]))
 
 # eye, target, up
 view = pyrr.matrix44.create_look_at(pyrr.Vector3([1, 1, 3]), pyrr.Vector3([0, 0, 0]), pyrr.Vector3([0, 1, 0]))
@@ -149,7 +149,7 @@ proj_loc = glGetUniformLocation(shader, "projection")
 view_loc = glGetUniformLocation(shader, "view")
 
 glUniformMatrix4fv(proj_loc, 1, GL_FALSE, projection)
-glUniformMatrix4fv(model_loc, 1, GL_FALSE, translation)
+glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
 glUniformMatrix4fv(view_loc, 1, GL_FALSE, view)
 
 # the main application loop
