@@ -5,7 +5,7 @@ from OpenGL.GL import glBindTexture, glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_
 from PIL import Image
 
 
-
+# for use with GLFW
 def load_texture(path, texture):
     glBindTexture(GL_TEXTURE_2D, texture)
     # Set the texture wrapping parameters
@@ -22,6 +22,7 @@ def load_texture(path, texture):
     return texture
 
 
+# for use with pygame
 def load_texture_pygame(path, texture):
     import pygame
     glBindTexture(GL_TEXTURE_2D, texture)
