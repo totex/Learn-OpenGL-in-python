@@ -13,6 +13,7 @@ lastX, lastY = WIDTH / 2, HEIGHT / 2
 first_mouse = True
 
 
+# the mouse position callback function
 def mouse_look_clb(window, xpos, ypos):
     global lastX, lastY
 
@@ -29,6 +30,7 @@ def mouse_look_clb(window, xpos, ypos):
     cam.process_mouse_movement(xoffset, yoffset)
 
 
+# the mouse enter callback function
 def mouse_enter_clb(window, entered):
     global first_mouse
 
@@ -99,8 +101,9 @@ glfw.set_window_pos(window, 400, 200)
 
 # set the callback function for window resize
 glfw.set_window_size_callback(window, window_resize)
-
+# set the mouse position callback
 glfw.set_cursor_pos_callback(window, mouse_look_clb)
+# set the mouse enter callback
 glfw.set_cursor_enter_callback(window, mouse_enter_clb)
 
 # make the context current
